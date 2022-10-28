@@ -12,44 +12,78 @@ const ships = [
   { name: "Destroyer", size: Destroyer },
 ];
 
-const emptyBoard = Array.from(Array(10), () => new Array(10).fill({
+const yPositions = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+
+const emptyBoard = Array.from(Array(10), () =>
+  new Array(10).fill({
     ship: false,
     fired: false,
     miss: false,
     shipName: "",
-}));
+  })
+);
 
-export const useShipsArrayToUpdateEmptyBoard = () => {
-    const updatedBoard = emptyBoard 
-    ships.forEach((ship) => {
-        const randomRow = Math.floor(Math.random() * 10);
-        const randomColumn = Math.floor(Math.random() * 10);
-        const randomDirection = Math.floor(Math.random() * 2);
-        const shipSize = ship.size;
+export const addTilePositionToEmptyBoard = () => {
+  return emptyBoard.map((row, rowIndex) => {
+    return row.map((tile, tileIndex) => {
+      return {
+        ...tile,
+        position: `${yPositions[rowIndex]}${tileIndex + 1}`,
+      };
+    });
+  });
+};
 
-        if (randomDirection === 0) {
-        for (let i = 0; i < shipSize; i++) {
-            if (updatedBoard[randomRow][randomColumn + i]) {
-            updatedBoard[randomRow][randomColumn + i] = {
-                ship: true,
-                fired: false,
-                miss: false,
-                shipName: ship.name,
-            };
+export const enemyBoardData = () => {
+    const board = addTilePositionToEmptyBoard();
+    ships.forEach(function (ship) {
+        let randomRow = Math.floor(Math.random() * 10);
+        let randomColumn = Math.floor(Math.random() * 10);
+        let randomDirection = Math.floor(Math.random() * 2);
+        let shipLength = ship.size;
+        let shipName = ship.name;
+        let shipPlaced = false;
+        while (!shipPlaced) {
+            if (randomDirection === 0) {
+                if (randomColumn + shipLength > 10) {
+                    randomColumn = Math.floor(Math.random() * 10);
+                } else {
+                    for (let i = 0; i < shipLength; i++) {
+                        if (board[randomRow][randomColumn + i].ship) {
+                            randomRow = Math.floor(Math.random() * 10);
+                            randomColumn = Math.floor(Math.random() * 10);
+                            break;
+                        } else if (i === shipLength - 1) {
+                            for (let j = 0; j < shipLength; j++) {
+                                board[randomRow][randomColumn + j].ship = true;
+                                board[randomRow][randomColumn + j].shipName = shipName;
+                            }
+                            shipPlaced = true;
+                        }
+                    }
+                }
+            } else {
+
+
+                if (randomRow + shipLength > 10) {
+                    randomRow = Math.floor(Math.random() * 10);
+                } else {
+                    for (let i = 0; i < shipLength; i++) {
+                        if (board[randomRow + i][randomColumn].ship) {
+                            randomRow = Math.floor(Math.random() * 10);
+                            randomColumn = Math.floor(Math.random() * 10);
+                            break;
+                        } else if (i === shipLength - 1) {
+                            for (let j = 0; j < shipLength; j++) {
+                                board[randomRow + j][randomColumn].ship = true;
+                                board[randomRow + j][randomColumn].shipName = shipName;
+                            }
+                            shipPlaced = true;
+                        }
+                    }
+                }
             }
-        }
-        } else {
-        for (let i = 0; i < shipSize; i++) {
-            if (updatedBoard[randomRow + i][randomColumn]) {
-            updatedBoard[randomRow + i][randomColumn] = {
-                ship: true,
-                fired: false,
-                miss: false,
-                shipName: ship.name,
-            };
-            }
-        }
         }
     });
-    return updatedBoard;
-    }
+    return board;
+};

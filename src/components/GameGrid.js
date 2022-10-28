@@ -16,24 +16,28 @@ export const GameGrid = () => {
   }, []);
 
 
-const fire = (position) => {
-    const row = enemyBoard.reduce((acc, arr) => {
-        const found = arr.find((tile) => tile.position === position);
-        if (found.ship) {
-            found.hit = true;
-            found.fired = true;
-        } else {
-            found.fired = true;
-            found.missed = true;
-        }
-        console.log(found)
-        return [...acc, arr];
-    }, []);
-
-    // console.log(row)
-    return row;
-};
-
+const fire = (position) => { 
+    const updatedEnemyBoard = enemyBoard.map((row) => {
+        return row.map((tile) => {
+            if (tile.position === position && tile.ship) {
+                return {
+                    ...tile,
+                    hit: true,
+                    fired: true,
+                }
+            } else if (tile.position === position) {
+                return {
+                    ...tile,
+                    fired: true,
+                    hit: false,
+                    miss: true,
+                }
+            }
+            return tile;
+        })
+    })
+    setEnemyBoard(updatedEnemyBoard);
+}
 
   return (
     <div>

@@ -3,17 +3,14 @@ import React from "react";
 export const Tile = ({ tileData, isEnemyBoard, showShips, fire }) => {
   const Element = isEnemyBoard ? "div" : "button";
   const handleFire = () => {
-    if(isEnemyBoard !== true) {
-    fire(tileData.position);
+    if (isEnemyBoard !== true) {
+      fire(tileData.position);
     }
-    };
-
+  };
 
   return (
     <Element
-      onClick={
-        () => handleFire(tileData.position)
-      }
+      onClick={() => handleFire(tileData.position)}
       style={{
         padding: 0,
         height: 40,
@@ -39,6 +36,7 @@ export const Tile = ({ tileData, isEnemyBoard, showShips, fire }) => {
       >
         {tileData.position}
       </div>
+      {tileData.fired ? <p>{tileData.hit ? "Hit" : "Miss"}</p> : null}
       {tileData.ship && showShips && (
         <div
           style={{

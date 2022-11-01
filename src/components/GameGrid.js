@@ -2,7 +2,9 @@ import React from "react";
 import {
   enemyBoardData,
   addTilePositionToEmptyBoard,
+  checkIfShipIsSunkBasedOffOfShipsArray
 } from "../utils/generateBattleShipTable";
+import { ScoreBoard } from "./ScoreBoard";
 import { Tile } from "./Tile";
 
 export const GameGrid = () => {
@@ -14,6 +16,7 @@ export const GameGrid = () => {
     setPlayerBoard(addTilePositionToEmptyBoard());
     setEnemyBoard(enemyBoardData());
   }, []);
+
 
 
 const fire = (position) => { 
@@ -36,11 +39,25 @@ const fire = (position) => {
             return tile;
         })
     })
+    const updatedPlayerBoard = playerBoard.map((row) => {
+        return row.map((tile) => {
+            if (tile.position === position) {
+                return {
+                    ...tile,
+                    fired: true,
+                }
+
+            }
+            return tile;
+        })
+    })
+    setPlayerBoard(updatedPlayerBoard);
     setEnemyBoard(updatedEnemyBoard);
 }
 
   return (
     <div>
+        <ScoreBoard enemyBoard={enemyBoard} />
       <h2
         style={{
           marginTop: 8,

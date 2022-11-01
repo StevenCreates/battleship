@@ -87,3 +87,14 @@ export const enemyBoardData = () => {
     });
     return board;
 };
+
+export const checkIfShipIsSunkBasedOffOfShipsArray = (board) => {
+    const shipNames = ships.map((ship) => ship.name);
+    const shipsSunk = shipNames.filter((shipName) => {
+        const shipTiles = board.flat().filter((tile) => tile.shipName === shipName);
+        const shipTilesHit = shipTiles.filter((tile) => tile.hit);
+        return shipTiles.length === shipTilesHit.length;
+    });
+    return shipsSunk;
+    }
+

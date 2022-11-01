@@ -36,7 +36,8 @@ export const Tile = ({ tileData, isEnemyBoard, showShips, fire }) => {
       >
         {tileData.position}
       </div>
-      {tileData.fired ? <p>{tileData.hit ? "Hit" : "Miss"}</p> : null}
+      {tileData.fired && isEnemyBoard ? <p>{tileData.hit ? "Hit" : "Miss"}</p> : null}
+      {tileData.fired && !isEnemyBoard ? <p>X</p> : null}
       {tileData.ship && showShips && (
         <div
           style={{
@@ -45,6 +46,7 @@ export const Tile = ({ tileData, isEnemyBoard, showShips, fire }) => {
             width: "100%",
             background: "#808080",
           }}
+          disabled={tileData.fired}
         >
           {tileData.shipName}
         </div>

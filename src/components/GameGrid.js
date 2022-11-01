@@ -1,63 +1,11 @@
 import React from "react";
-import {
-  enemyBoardData,
-  addTilePositionToEmptyBoard,
-  checkIfShipIsSunkBasedOffOfShipsArray
-} from "../utils/generateBattleShipTable";
-import { ScoreBoard } from "./ScoreBoard";
 import { Tile } from "./Tile";
 
-export const GameGrid = () => {
+export const GameGrid = ({enemyBoard, fire, playerBoard}) => {
   const [cheat, setCheat] = React.useState(false);
-  const [playerBoard, setPlayerBoard] = React.useState([]);
-  const [enemyBoard, setEnemyBoard] = React.useState([]);
-
-  React.useMemo(() => {
-    setPlayerBoard(addTilePositionToEmptyBoard());
-    setEnemyBoard(enemyBoardData());
-  }, []);
-
-
-
-const fire = (position) => { 
-    const updatedEnemyBoard = enemyBoard.map((row) => {
-        return row.map((tile) => {
-            if (tile.position === position && tile.ship) {
-                return {
-                    ...tile,
-                    hit: true,
-                    fired: true,
-                }
-            } else if (tile.position === position) {
-                return {
-                    ...tile,
-                    fired: true,
-                    hit: false,
-                    miss: true,
-                }
-            }
-            return tile;
-        })
-    })
-    const updatedPlayerBoard = playerBoard.map((row) => {
-        return row.map((tile) => {
-            if (tile.position === position) {
-                return {
-                    ...tile,
-                    fired: true,
-                }
-
-            }
-            return tile;
-        })
-    })
-    setPlayerBoard(updatedPlayerBoard);
-    setEnemyBoard(updatedEnemyBoard);
-}
 
   return (
     <div>
-        <ScoreBoard enemyBoard={enemyBoard} />
       <h2
         style={{
           marginTop: 8,
